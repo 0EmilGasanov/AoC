@@ -44,14 +44,28 @@ const checkRule = (rule, pages) => {
   return true
 };
 
+const fix = (update, rules) => {
+  update.sort((a,b) => {
+    // a -> b
+    if(rules.has(a) && rules.get(a).includes(b)){
+      return -1;
+    }
+
+    // b -> a
+    if(rules.has(b) && rules.get(b).includes(a)){
+      return 1;
+    }
+  })
+
+  return update;
+}
+
 const part1 = (rawInput) => {
   const { rules, updates } = parseRulesUpdates(rawInput);
 
-  console.log({ rules }, { updates })
-
   let result = 0;
 
-updateLoop:
+  updateLoop:
   for (let update of updates) {
 
     // go right to left
@@ -70,9 +84,24 @@ updateLoop:
 };
 
 const part2 = (rawInput) => {
-  const input = parseRulesUpdates(rawInput);
+  const { rules, updates } = parseRulesUpdates(rawInput);
 
-  return;
+  let result = 0;
+
+  for (let update of updates) {
+
+    // go right to left
+    for (let i = update.length - 1; i >= 0; i--) {
+
+      // rule broken!
+      if (!checkRule(rules.get(update[i]), update.slice(0, i))) {
+        let fixedUpdate = fix(update, rules);
+        result += parseInt(fixedUpdate[Math.floor(update.length / 2)])
+      }
+    }
+  }
+
+  return result;
 };
 
 run({
@@ -115,8 +144,35 @@ run({
   part2: {
     tests: [
       {
-        input: ``,
-        expected: 0,
+        input: `47|53
+97|13
+97|61
+97|47
+75|29
+61|13
+75|53
+29|13
+97|29
+53|29
+61|53
+97|53
+61|29
+47|13
+75|47
+97|75
+47|61
+75|61
+47|29
+75|13
+53|13
+
+75,47,61,53,29
+97,61,53,29,13
+75,29,13
+75,97,47,61,53
+61,13,29
+97,13,75,29,47`,
+        expected: 123,
       },
     ],
     solution: part2,

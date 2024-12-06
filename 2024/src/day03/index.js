@@ -6,16 +6,31 @@ const part1 = (rawInput) => {
   const regex = /mul\(\d\d?\d?,\d\d?\d?\)/gm
   const correctMuls = rawInput.matchAll(regex);
   let result = 0;
-  for(let mulStr of correctMuls) {
-    result +=eval(mulStr[0]);
+  for (let mulStr of correctMuls) {
+    result += eval(mulStr[0]);
   }
 
   return result;
 };
 const part2 = (rawInput) => {
-  const input = parseInput(rawInput);
+  const mul = (num1, num2) => num1 * num2;
 
-  return;
+  const regex = /mul\(\d\d?\d?,\d\d?\d?\)|don't\(\)|do\(\)/gm;
+  const matches = rawInput.matchAll(regex);
+
+  let result = 0;
+  let doMul = true;
+  for (let match of matches) {
+    if (match[0] == "don't()") {
+      doMul = false;
+    } else if (match[0] == "do()") {
+      doMul = true
+    } else if (doMul) {
+      result += eval(match[0]);
+    }
+  }
+
+  return result;
 };
 
 run({
