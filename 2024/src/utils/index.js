@@ -23,6 +23,10 @@
  *     import { myUtil } from '../utils'
  */
 
+export function parseMatrix(rawInput) {
+    return rawInput.split("\n").map((line) => line.split(""));
+}
+
 export function parseInput(rawInput) {
     return rawInput.split("\n").map((line) => line.trim());
 }
