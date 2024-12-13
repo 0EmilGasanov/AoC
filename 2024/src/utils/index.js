@@ -22,7 +22,6 @@
  *     import myLib from '../utils/myLib'
  *     import { myUtil } from '../utils'
  */
-
 export function parseMatrix(rawInput) {
     return rawInput.split("\n").map((line) => line.split(""));
 }
